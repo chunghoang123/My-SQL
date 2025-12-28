@@ -1,0 +1,19 @@
+
+CREATE DATABASE IF NOT EXISTS quan_ly;
+USE quan_ly;
+CREATE TABLE Class (
+    MaLop VARCHAR(10) PRIMARY KEY,
+    TenLop NVARCHAR(100) NOT NULL,
+    NamHoc INT NOT NULL
+);
+CREATE TABLE Student (
+    MaSV VARCHAR(10) PRIMARY KEY,
+    HoTen NVARCHAR(100) NOT NULL,
+    NgaySinh DATE NOT NULL,
+    MaLop VARCHAR(10) NOT NULL,
+    CONSTRAINT FK_Student_Class
+        FOREIGN KEY (MaLop)
+        REFERENCES Class(MaLop)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT
+);

@@ -1,0 +1,28 @@
+CREATE DATABASE bai5;
+USE bai5;
+
+-- Bảng Teacher
+CREATE TABLE Teacher (
+    MaGV VARCHAR(10) PRIMARY KEY,
+    HoTen VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- Bảng Subject
+CREATE TABLE Subject (
+    MaMH VARCHAR(10) PRIMARY KEY,
+    TenMH VARCHAR(100) NOT NULL,
+    SoTinChi INT NOT NULL
+);
+
+-- Thêm cột MaGV vào Subject
+ALTER TABLE Subject
+ADD MaGV VARCHAR(10);
+
+-- Tạo khóa ngoại liên kết Teacher
+ALTER TABLE Subject
+ADD CONSTRAINT FK_Subject_Teacher
+FOREIGN KEY (MaGV)
+REFERENCES Teacher(MaGV)
+ON UPDATE CASCADE
+ON DELETE SET NULL;
