@@ -52,7 +52,7 @@ UPDATE Score
 SET DiemGK = 8,
     DiemCK = 9,
     DiemTB = (8 + 9) / 2
-WHERE IdStudent = 1
+WHERE IdStudent = 1 
   AND IdSubject = 101;
 DELETE FROM Score
 WHERE IdStudent = 1
