@@ -1,26 +1,30 @@
-create database Dang_ky1;
-use Dang_ky1;
+create database bai4;
 
-CREATE TABLE Enrollment (
-    MaSV VARCHAR(10) NOT NULL,
-    MaMH VARCHAR(10) NOT NULL,
-    NgayDangKy DATE NOT NULL,
+use bai4;
 
-    PRIMARY KEY (MaSV, MaMH),
+create table student(
+	IdStudent int primary key,
+    FullName varchar(20) not null
+);
 
-    CONSTRAINT FK_Enrollment_Student
-        FOREIGN KEY (MaSV)
-        REFERENCES Student(MaSV)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
+create table subjects(
+	IdSubject int primary key, 
+    FullSubject varchar(50) not null,
+    Credit int not null
+    
+    constraint CK_Subject_Credit check ( credit > 0)
+);
 
-    CONSTRAINT FK_Enrollment_Subject
-        FOREIGN KEY (MaMH)
-        REFERENCES Subject(MaMH)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-) ENGINE=InnoDB;
-INSERT INTO Enrollment VALUES
-('SV01', 'MH01', '2025-01-10'),
-('SV01', 'MH02', '2025-01-11'),
-('SV02', 'MH01', '2025-01-12');
+create  table enrollment(
+	IdStudents int not null,
+    IdSubjects  int not null,
+    RegistrationDate date not null,
+    
+    primary key (IdStudents, IdSubjects),
+		constraint FK_Enrollment_student 
+        foreign key (IdStudents) references student(IdStudent),
+        
+        constraint FK_Enrollment_IdSubject
+			foreign key(IdSubjects) references subjects(IdSubject)
+        
+);

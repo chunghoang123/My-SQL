@@ -1,41 +1,28 @@
-CREATE DATABASE IF NOT EXISTS bai6;
-USE bai6;
 
--- 1. Bảng Student
-CREATE TABLE Student (
-    MaSV VARCHAR(10) PRIMARY KEY,
-    HoTen VARCHAR(100) NOT NULL
+use bai6;
+
+create table student(
+	IdStudent int primary key,
+    FullName varchar(20) not null
 );
 
--- 2. Bảng Subject
-CREATE TABLE Subject (
-    MaMH VARCHAR(10) PRIMARY KEY,
-    TenMH VARCHAR(100) NOT NULL
+create table subjects(
+	IdSubject int primary key, 
+    FullSubject varchar(50) not null
 );
 
--- 3. Bảng Score
-CREATE TABLE Score (
-    MaSV VARCHAR(10) NOT NULL,
-    MaMH VARCHAR(10) NOT NULL,
-    DiemQuaTrinh DECIMAL(4,2) NOT NULL,
-    DiemCuoiKy DECIMAL(4,2) NOT NULL,
-
-    -- Khóa chính ghép
-    PRIMARY KEY (MaSV, MaMH),
-
-    -- Ràng buộc điểm
-    CHECK (DiemQuaTrinh BETWEEN 0 AND 10),
-    CHECK (DiemCuoiKy BETWEEN 0 AND 10),
-
-    -- Khóa ngoại Sinh viên
-    FOREIGN KEY (MaSV)
-        REFERENCES Student(MaSV)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-
-    -- Khóa ngoại Môn học
-    FOREIGN KEY (MaMH)
-        REFERENCES Subject(MaMH)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
+create table Score(
+	IdStudent int not null,
+    IdSubject int not null,
+    
+    
+    processScore float not null,
+    finalScore float not null,
+    
+    primary key (Idstudent,Idsubject),
+    constraint CK_ProcessScore check(processScore between 0 and 10),
+    constraint CK_FinalScore check(finalScore between 0 and 10),
+    
+    foreign key(IdStudent) references student(IdStudent),
+    foreign key(IdSubject) references subjects(IdSubject)
 );

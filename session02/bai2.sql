@@ -1,19 +1,19 @@
+CREATE DATABASE bai2;
+USE bai2;
 
-CREATE DATABASE IF NOT EXISTS quan_ly;
-USE quan_ly;
 CREATE TABLE Class (
-    MaLop VARCHAR(10) PRIMARY KEY,
-    TenLop NVARCHAR(100) NOT NULL,
-    NamHoc INT NOT NULL
+    IdClass INT PRIMARY KEY,
+    NameClass VARCHAR(20) NOT NULL,
+    SchoolYear VARCHAR(20) NOT NULL
 );
+
 CREATE TABLE Student (
-    MaSV VARCHAR(10) PRIMARY KEY,
-    HoTen NVARCHAR(100) NOT NULL,
-    NgaySinh DATE NOT NULL,
-    MaLop VARCHAR(10) NOT NULL,
+    IdStudent INT PRIMARY KEY,
+    FullName VARCHAR(20) NOT NULL,
+    DateOfBirth DATE NOT NULL,
+    IdClass INT NOT NULL,
+
     CONSTRAINT FK_Student_Class
-        FOREIGN KEY (MaLop)
-        REFERENCES Class(MaLop)
-        ON UPDATE CASCADE
-        ON DELETE RESTRICT
+        FOREIGN KEY (IdClass)
+        REFERENCES Class(IdClass)
 );

@@ -1,5 +1,5 @@
-create database bai1;
-use bai1;
+create database bai1
+use bai1;;
 
 
 create table Student(
@@ -10,11 +10,11 @@ create table Student(
 );
 
 insert into Student(student_id,full_name,date_of_birth,email)
-values('SV01', 'Nguyen Van A', '2003-05-12', 'a.nguyen@gmail.com');
+values('01', 'Nguyen Van A', '2003-05-12', 'a.nguyen@gmail.com');
 
 
 insert into Student(student_id,full_name,date_of_birth,email)
-values('SV02', 'Nguyen Van B', '2005-05-12', 'b.nguyen@gmail.com');
+values('S02', 'Nguyen Van B', '2005-05-12', 'b.nguyen@gmail.com');
 
 
 insert into Student(student_id,full_name,date_of_birth,email)

@@ -1,28 +1,16 @@
-CREATE DATABASE bai5;
+create database bai5;
 USE bai5;
-
--- Bảng Teacher
-CREATE TABLE Teacher (
-    MaGV VARCHAR(10) PRIMARY KEY,
-    HoTen VARCHAR(100) NOT NULL,
-    Email VARCHAR(100) NOT NULL UNIQUE
+create table Teacher(
+	IdTeacher int primary key,
+    FullName varchar(20) not null,
+    Email varchar(50) not null unique
 );
-
--- Bảng Subject
-CREATE TABLE Subject (
-    MaMH VARCHAR(10) PRIMARY KEY,
-    TenMH VARCHAR(100) NOT NULL,
-    SoTinChi INT NOT NULL
+create table subjects(
+	IdSubject int primary key, 
+    FullSubject varchar(50) not null,
+    Credit int not null,
+    
+    
+    IdTeacher int not null, 
+    foreign key (IdTeacher) references Teacher(IdTeacher)
 );
-
--- Thêm cột MaGV vào Subject
-ALTER TABLE Subject
-ADD MaGV VARCHAR(10);
-
--- Tạo khóa ngoại liên kết Teacher
-ALTER TABLE Subject
-ADD CONSTRAINT FK_Subject_Teacher
-FOREIGN KEY (MaGV)
-REFERENCES Teacher(MaGV)
-ON UPDATE CASCADE
-ON DELETE SET NULL;
