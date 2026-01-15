@@ -1,16 +1,22 @@
 use social_network;
 
-create table  followers (
+-- bảng followers: lưu quan hệ theo dõi giữa các user
+create table followers (
     follower_id int not null,
     followed_id int not null,
     primary key (follower_id, followed_id),
     foreign key (follower_id) references users(user_id),
     foreign key (followed_id) references users(user_id)
 );
+
+
+-- bổ sung cột đếm số follow cho bảng users
 alter table users
 add column following_count int default 0,
 add column followers_count int default 0;
 
+
+-- bảng follow_log: ghi log các lỗi khi follow thất bại
 create table follow_log (
     log_id int auto_increment primary key,
     follower_id int,
@@ -18,6 +24,9 @@ create table follow_log (
     error_message varchar(255),
     created_at datetime default current_timestamp
 );
+
+
+-- stored procedure: xử lý nghiệp vụ follow user
 delimiter $$
 
 create procedure sp_follow_user (
@@ -27,6 +36,7 @@ create procedure sp_follow_user (
 begin
     declare v_count int;
 
+    -- bắt đầu transaction
     start transaction;
 
     -- kiểm tra follower tồn tại
@@ -61,7 +71,7 @@ begin
         leave proc_end;
     end if;
 
-    -- kiểm tra đã follow trước đó chưa
+    -- kiểm tra đã follow trước đó
     select count(*) into v_count
     from followers
     where follower_id = p_follower_id
@@ -74,11 +84,10 @@ begin
         leave proc_end;
     end if;
 
-    -- insert follow
+    -- thêm quan hệ follow và cập nhật số lượng
     insert into followers (follower_id, followed_id)
     values (p_follower_id, p_followed_id);
 
-    -- cập nhật số lượng
     update users
     set following_count = following_count + 1
     where user_id = p_follower_id;
@@ -87,16 +96,21 @@ begin
     set followers_count = followers_count + 1
     where user_id = p_followed_id;
 
+    -- xác nhận transaction
     commit;
 
     proc_end: end;
 end$$
 
 delimiter ;
-call sp_follow_user(1, 2);
-call sp_follow_user(1, 2);
-call sp_follow_user(1, 1);
-call sp_follow_user(1, 999);
+
+-- test các trường hợp follow
+call sp_follow_user(1, 2);   -- follow hợp lệ
+call sp_follow_user(1, 2);   -- follow trùng
+call sp_follow_user(1, 1);   -- tự follow
+call sp_follow_user(1, 999); -- follow user không tồn tại
+
+-- kiểm tra kết quả
 select * from followers;
 select user_id, following_count, followers_count from users;
 select * from follow_log;

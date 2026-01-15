@@ -1,4 +1,6 @@
 use social_network;
+
+-- tạo bảng comments: lưu bình luận cho bài viết
 create table comments (
     comment_id int auto_increment primary key,
     post_id int not null,
@@ -8,22 +10,28 @@ create table comments (
     foreign key (post_id) references posts(post_id),
     foreign key (user_id) references users(user_id)
 );
+
+-- thêm cột đếm số bình luận cho bảng posts
 alter table posts
 add column comments_count int default 0;
+
 delimiter $$
 
+-- procedure thêm bình luận, sử dụng savepoint
 create procedure sp_post_comment (
     in p_post_id int,
     in p_user_id int,
     in p_content text
 )
 begin
+    -- handler xử lý lỗi sql
     declare exit handler for sqlexception
     begin
         rollback to after_insert;
         commit;
     end;
 
+    -- bắt đầu transaction
     start transaction;
 
     -- thêm bình luận
@@ -38,13 +46,27 @@ begin
     set comments_count = comments_count + 1
     where post_id = p_post_id;
 
+    -- commit transaction
     commit;
 end$$
 
 delimiter ;
+
+-- test thêm bình luận thành công
 call sp_post_comment(1, 1, 'bình luận đầu tiên');
+
+-- tạo lỗi để test rollback về savepoint
 alter table posts rename column comments_count to comments_count_bak;
+
 call sp_post_comment(1, 1, 'test savepoint rollback');
+
+-- khôi phục lại tên cột
 alter table posts rename column comments_count_bak to comments_count;
+
+-- kiểm tra bảng comments
 select * from comments;
-select post_id, comments_count from posts where post_id = 1;
+
+-- kiểm tra số lượng bình luận của bài viết
+select post_id, comments_count
+from posts
+where post_id = 1;
